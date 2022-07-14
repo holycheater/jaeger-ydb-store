@@ -46,6 +46,7 @@ func (e *traceExporter) push(ctx context.Context, td ptrace.Traces) error {
 			spans = append(spans, span)
 		}
 	}
+	// TODO: respect exporter context
 	e.spanWriter.WriteSpans(spans)
 	e.indexWriter.ProcessAndWriteBatch(spans)
 
