@@ -5,15 +5,17 @@ import (
 
 	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/exporter/exporterhelper"
+
+	"github.com/yandex-cloud/jaeger-ydb-store/otel/configydb"
 )
 
 type Config struct {
-	config.ExporterSettings        `mapstructure:",squash"` // squash ensures fields are correctly decoded in embedded struct
+	config.ExporterSettings `mapstructure:",squash"` // squash ensures fields are correctly decoded in embedded struct
+	configydb.ClientConfig  `mapstructure:",squash"`
+
 	exporterhelper.TimeoutSettings `mapstructure:",squash"` // squash ensures fields are correctly decoded in embedded struct.
 	exporterhelper.QueueSettings   `mapstructure:"sending_queue"`
 	exporterhelper.RetrySettings   `mapstructure:"retry_on_failure"`
-
-	YDBConfig map[string]interface{} `mapstructure:",remain"`
 }
 
 // Validate checks if the exporter configuration is valid

@@ -3,7 +3,7 @@ package indexer
 import "github.com/jaegertracing/jaeger/model"
 
 var (
-	stopList = []string{"sampler.type", "sampler.param", "internal.span.format"}
+	stopList = []string{"sampler.type", "sampler.param", "internal.span.format", "yandex.tracing.project"}
 	stopMap  map[string]struct{}
 )
 

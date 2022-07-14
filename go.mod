@@ -18,10 +18,11 @@ require (
 	github.com/stretchr/testify v1.7.1
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible
-	github.com/ydb-platform/ydb-go-genproto v0.0.0-20220203104745-929cf9c248bc
-	github.com/ydb-platform/ydb-go-sdk-zap v0.9.1
-	github.com/ydb-platform/ydb-go-sdk/v3 v3.16.10
+	github.com/ydb-platform/ydb-go-genproto v0.0.0-20220531094121-36ca6bddb9f7
+	github.com/ydb-platform/ydb-go-sdk-zap v0.10.1
+	github.com/ydb-platform/ydb-go-sdk/v3 v3.26.10
 	github.com/ydb-platform/ydb-go-yc v0.6.2
+	go.opencensus.io v0.23.0
 	go.opentelemetry.io/collector v0.50.0
 	go.opentelemetry.io/collector/pdata v0.50.0
 	go.uber.org/zap v1.21.0
@@ -42,6 +43,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/yamux v0.0.0-20190923154419-df201c70410d // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/jonboulle/clockwork v0.2.2 // indirect
 	github.com/knadh/koanf v1.4.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
@@ -65,7 +67,6 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/yandex-cloud/go-genproto v0.0.0-20211115083454-9ca41db5ed9e // indirect
 	github.com/ydb-platform/ydb-go-yc-metadata v0.1.0 // indirect
-	go.opencensus.io v0.23.0 // indirect
 	go.opentelemetry.io/collector/semconv v0.50.0 // indirect
 	go.opentelemetry.io/otel v1.6.3 // indirect
 	go.opentelemetry.io/otel/metric v0.29.0 // indirect

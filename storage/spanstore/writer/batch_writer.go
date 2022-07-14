@@ -20,19 +20,28 @@ const (
 )
 
 type BatchSpanWriter struct {
-	metrics batchWriterMetrics
-	pool    table.Client
-	logger  *zap.Logger
-	opts    BatchWriterOptions
+	pool   table.Client
+	logger *zap.Logger
+	opts   BatchWriterOptions
+
+	metrics *wmetrics.TableMetrics
 }
 
-func NewBatchWriter(pool table.Client, factory metrics.Factory, logger *zap.Logger, opts BatchWriterOptions) *BatchSpanWriter {
+func NewBatchWriter(pool table.Client, mf metrics.Factory, logger *zap.Logger, opts BatchWriterOptions) *BatchSpanWriter {
 	return &BatchSpanWriter{
 		pool:    pool,
 		logger:  logger,
 		opts:    opts,
-		metrics: newBatchWriterMetrics(factory),
+		metrics: wmetrics.NewTableMetrics(mf, tblTraces),
 	}
+}
+
+func (w *BatchSpanWriter) WriteSpans(spans []*model.Span) {
+	items := make([]interface{}, len(spans))
+	for i, s := range spans {
+		items[i] = s
+	}
+	w.WriteItems(items)
 }
 
 func (w *BatchSpanWriter) WriteItems(items []interface{}) {
@@ -61,18 +70,18 @@ func (w *BatchSpanWriter) writeItemsToPartition(part schema.PartitionKey, items 
 	}
 	var err error
 
-	if err = w.uploadRows(ctx, tableName(tblTraces), spanRecords, w.metrics.traces); err != nil {
+	if err = w.uploadRows(ctx, tableName(tblTraces), spanRecords); err != nil {
 		w.logger.Error("insertSpan error", zap.Error(err))
 		return
 	}
 }
 
-func (w *BatchSpanWriter) uploadRows(ctx context.Context, tableName string, rows []types.Value, metrics *wmetrics.WriteMetrics) error {
+func (w *BatchSpanWriter) uploadRows(ctx context.Context, tableName string, rows []types.Value) error {
 	ts := time.Now()
 	data := types.ListValue(rows...)
 	err := w.pool.Do(ctx, func(ctx context.Context, session table.Session) (err error) {
 		return session.BulkUpsert(ctx, tableName, data)
 	})
-	metrics.Emit(err, time.Since(ts), len(rows))
+	w.metrics.Emit(err, time.Since(ts), len(rows))
 	return err
 }
